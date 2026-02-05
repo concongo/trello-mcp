@@ -5,7 +5,7 @@ MCP server exposing Trello board, list, and card operations as tools.
 ## Setup
 
 ```bash
-uv venv && uv pip install -e ".[dev]"
+uv sync --extra dev
 cp .env.example .env  # Fill in your Trello API key and token
 ```
 
@@ -13,10 +13,10 @@ cp .env.example .env  # Fill in your Trello API key and token
 
 ```bash
 # stdio transport (default, for MCP clients like Claude Code)
-trello-mcp run
+uv run trello-mcp run
 
 # SSE transport (for network access)
-trello-mcp run --transport sse --port 8000
+uv run trello-mcp run --transport sse --port 8000
 ```
 
 ## Docker
@@ -35,6 +35,7 @@ docker compose up --build
 | `get_board_cards` | Get all cards on a board |
 | `create_card` | Create a new card in a list |
 | `move_card` | Move a card to another list |
+| `update_card` | Update a card's name and/or description |
 | `add_comment` | Add a comment to a card |
 | `archive_card` | Archive (close) a card |
 | `search_board` | Find a board by name substring |
@@ -42,6 +43,6 @@ docker compose up --build
 ## Development
 
 ```bash
-pytest --cov
-ruff check . && ruff format --check .
+uv run pytest --cov
+uv run ruff check . && uv run ruff format --check .
 ```
