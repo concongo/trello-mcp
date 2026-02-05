@@ -24,6 +24,9 @@ def mock_trello():
     client.move_card.return_value = TrelloCard(
         id="card1", name="Task 1", idList="list2", idBoard="board1"
     )
+    client.update_card.return_value = TrelloCard(
+        id="card1", name="Updated", desc="New desc", idList="list1", idBoard="board1"
+    )
     client.add_comment.return_value = {"id": "action1", "data": {"text": "Hi"}}
     client.archive_card.return_value = TrelloCard(
         id="card1", name="Task 1", idList="list1", idBoard="board1", closed=True
@@ -78,6 +81,17 @@ async def test_move_card_tool(mock_trello):
     async with Client(mcp) as c:
         result = await c.call_tool("move_card", {"card_id": "card1", "list_id": "list2"})
         assert_tool_success(result)
+
+
+async def test_update_card_tool(mock_trello):
+    async with Client(mcp) as c:
+        result = await c.call_tool(
+            "update_card", {"card_id": "card1", "name": "Updated", "desc": "New desc"}
+        )
+        assert_tool_success(result)
+        mock_trello.update_card.assert_awaited_once_with(
+            "card1", name="Updated", desc="New desc"
+        )
 
 
 async def test_add_comment_tool(mock_trello):

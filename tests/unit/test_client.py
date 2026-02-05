@@ -84,6 +84,16 @@ async def test_move_card(mock_client):
 
 
 @respx.mock
+async def test_update_card(mock_client):
+    updated = {**SAMPLE_CARDS[0], "name": "Updated", "desc": "New desc"}
+    respx.put("https://api.trello.com/1/cards/card1").mock(
+        return_value=httpx.Response(200, json=updated)
+    )
+    card = await mock_client.update_card("card1", name="Updated", desc="New desc")
+    assert card.name == "Updated"
+
+
+@respx.mock
 async def test_add_comment(mock_client):
     comment_resp = {"id": "action1", "type": "commentCard", "data": {"text": "Hello"}}
     respx.post("https://api.trello.com/1/cards/card1/actions/comments").mock(

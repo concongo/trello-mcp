@@ -64,6 +64,17 @@ class TrelloClient:
     async def add_comment(self, card_id: str, text: str) -> dict:
         return await self._post(f"/cards/{card_id}/actions/comments", {"text": text})
 
+    async def update_card(
+        self, card_id: str, name: str | None = None, desc: str | None = None
+    ) -> TrelloCard:
+        params = {}
+        if name is not None:
+            params["name"] = name
+        if desc is not None:
+            params["desc"] = desc
+        data = await self._put(f"/cards/{card_id}", params)
+        return TrelloCard(**data)
+
     async def archive_card(self, card_id: str) -> TrelloCard:
         data = await self._put(f"/cards/{card_id}", {"closed": "true"})
         return TrelloCard(**data)

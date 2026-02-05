@@ -71,6 +71,13 @@ async def move_card(card_id: str, list_id: str) -> dict:
 
 
 @mcp.tool()
+async def update_card(card_id: str, name: str | None = None, desc: str | None = None) -> dict:
+    """Update a card's name and/or description."""
+    card = await get_client().update_card(card_id, name=name, desc=desc)
+    return card.model_dump()
+
+
+@mcp.tool()
 async def add_comment(card_id: str, text: str) -> dict:
     """Add a comment to a Trello card."""
     return await get_client().add_comment(card_id, text)
