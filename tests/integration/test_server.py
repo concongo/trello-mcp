@@ -89,9 +89,7 @@ async def test_update_card_tool(mock_trello):
             "update_card", {"card_id": "card1", "name": "Updated", "desc": "New desc"}
         )
         assert_tool_success(result)
-        mock_trello.update_card.assert_awaited_once_with(
-            "card1", name="Updated", desc="New desc"
-        )
+        mock_trello.update_card.assert_awaited_once_with("card1", name="Updated", desc="New desc")
 
 
 async def test_add_comment_tool(mock_trello):
@@ -110,3 +108,20 @@ async def test_search_board_tool(mock_trello):
     async with Client(mcp) as c:
         result = await c.call_tool("search_board", {"query": "alpha"})
         assert_tool_success(result)
+
+
+async def test_resources_are_registered():
+    async with Client(mcp) as c:
+        resources = await c.list_resources()
+        uris = {str(r.uri) for r in resources}
+        assert "trello://docs/api-introduction" in uris
+        assert "trello://docs/object-definitions" in uris
+        assert "trello://docs/status-codes" in uris
+        assert len(uris) == 8
+
+
+async def test_resource_content_readable():
+    async with Client(mcp) as c:
+        result = await c.read_resource("trello://docs/api-introduction")
+        text = result[0].content if hasattr(result[0], "content") else str(result[0])
+        assert "Trello API Introduction" in text

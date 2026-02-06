@@ -1,11 +1,54 @@
 """FastMCP server exposing Trello operations as tools."""
 
+from importlib import resources as pkg_resources
+
 from fastmcp import FastMCP
 
 from trello_mcp.client import TrelloClient
 from trello_mcp.models import Settings
 
 mcp = FastMCP("Trello MCP Server")
+
+# --- Resources: Trello API documentation ---
+
+_RESOURCES = {
+    "api-introduction": "API Introduction — core concepts, endpoints, and first requests",
+    "nested-resources": "Nested Resources — accessing hierarchical data",
+    "object-definitions": "Object Definitions — Board, Card, List, Member, Action fields",
+    "limits": "Limits — board and card object limits and thresholds",
+    "rate-limits": "Rate Limits — request quotas, error responses, and best practices",
+    "custom-fields": "Custom Fields — creating, reading, updating custom field values on cards",
+    "authorization": "Authorization — API keys, tokens, OAuth, scopes, and security",
+    "status-codes": "Status Codes — HTTP response codes returned by the API",
+}
+
+
+def _load_resource(name: str) -> str:
+    filename = name.replace("-", "_")
+    ref = pkg_resources.files("trello_mcp").joinpath(f"resources/{filename}.md")
+    return ref.read_text(encoding="utf-8")
+
+
+def _register_resources():
+    from fastmcp.resources.resource import FunctionResource
+
+    for slug, desc in _RESOURCES.items():
+
+        def _reader(s=slug) -> str:
+            return _load_resource(s)
+
+        resource = FunctionResource(
+            uri=f"trello://docs/{slug}",
+            name=slug,
+            description=desc,
+            mime_type="text/markdown",
+            fn=_reader,
+        )
+        mcp.add_resource(resource)
+
+
+_register_resources()
+
 
 _client: TrelloClient | None = None
 
