@@ -31,17 +31,25 @@ docker compose up --build
 
 The client spawns the server as a subprocess. Use this for Claude Code, Cursor, Windsurf, and similar tools.
 
-**Claude Code** — add to `~/.claude/claude_desktop_config.json`:
+**Claude Code** — add to `.mcp.json` (project) or `~/.claude.json` (global), or use the CLI:
+
+```bash
+claude mcp add --transport stdio trello -- \
+  uv --directory /absolute/path/to/trello-mcp run trello-mcp run
+```
+
+Or manually add to `.mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "trello": {
+      "type": "stdio",
       "command": "uv",
       "args": ["--directory", "/absolute/path/to/trello-mcp", "run", "trello-mcp", "run"],
       "env": {
-        "TRELLO_API_KEY": "your-api-key",
-        "TRELLO_TOKEN": "your-token"
+        "TRELLO_API_KEY": "${TRELLO_API_KEY}",
+        "TRELLO_TOKEN": "${TRELLO_TOKEN}"
       }
     }
   }
@@ -76,12 +84,19 @@ uv run trello-mcp run --transport sse --port 8000
 
 Then configure your client to connect to `http://localhost:8000/sse`.
 
-**Claude Code** — add to `~/.claude/claude_desktop_config.json`:
+**Claude Code** — add to `.mcp.json` or use the CLI:
+
+```bash
+claude mcp add --transport sse trello http://localhost:8000/sse
+```
+
+Or manually:
 
 ```json
 {
   "mcpServers": {
     "trello": {
+      "type": "sse",
       "url": "http://localhost:8000/sse"
     }
   }
