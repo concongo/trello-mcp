@@ -25,6 +25,81 @@ uv run trello-mcp run --transport sse --port 8000
 docker compose up --build
 ```
 
+## Client Configuration
+
+### stdio (local clients)
+
+The client spawns the server as a subprocess. Use this for Claude Code, Cursor, Windsurf, and similar tools.
+
+**Claude Code** — add to `~/.claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "trello": {
+      "command": "uv",
+      "args": ["--directory", "/absolute/path/to/trello-mcp", "run", "trello-mcp", "run"],
+      "env": {
+        "TRELLO_API_KEY": "your-api-key",
+        "TRELLO_TOKEN": "your-token"
+      }
+    }
+  }
+}
+```
+
+**Cursor** — add to `.cursor/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "trello": {
+      "command": "uv",
+      "args": ["--directory", "/absolute/path/to/trello-mcp", "run", "trello-mcp", "run"],
+      "env": {
+        "TRELLO_API_KEY": "your-api-key",
+        "TRELLO_TOKEN": "your-token"
+      }
+    }
+  }
+}
+```
+
+### SSE (network clients)
+
+Start the server first, then point your client to the SSE endpoint.
+
+```bash
+# Start the server (or use docker compose up --build)
+uv run trello-mcp run --transport sse --port 8000
+```
+
+Then configure your client to connect to `http://localhost:8000/sse`.
+
+**Claude Code** — add to `~/.claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "trello": {
+      "url": "http://localhost:8000/sse"
+    }
+  }
+}
+```
+
+**Cursor** — add to `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "trello": {
+      "url": "http://localhost:8000/sse"
+    }
+  }
+}
+```
+
 ## Tools
 
 | Tool | Description |
