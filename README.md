@@ -1,6 +1,35 @@
 # Trello MCP Server
 
-MCP server exposing Trello board, list, and card operations as tools.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![CI](https://github.com/concongo/trello-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/concongo/trello-mcp/actions/workflows/ci.yml)
+
+An [MCP](https://modelcontextprotocol.io/) server that exposes Trello board, list, and card operations as tools — so AI assistants like Claude can manage your Trello boards directly.
+
+Built with [FastMCP](https://github.com/jlowin/fastmcp), [httpx](https://www.python-httpx.org/), and [Pydantic](https://docs.pydantic.dev/).
+
+## Features
+
+- List, create, update, move, and archive Trello cards
+- Browse boards and lists
+- Search boards by name
+- Add comments to cards
+- Bundled Trello API documentation as MCP resources
+- Supports **stdio** and **SSE** transports
+- Docker ready
+
+## Prerequisites
+
+- Python 3.12+
+- [uv](https://docs.astral.sh/uv/) package manager
+- A Trello account with API credentials
+
+### Getting Trello API Credentials
+
+1. Go to https://trello.com/power-ups/admin and log in
+2. Create a new Power-Up (or use an existing one)
+3. Copy your **API Key** from the Power-Up settings
+4. Generate a **Token** by clicking the token link on the same page and authorizing access
 
 ## Setup
 
@@ -73,6 +102,25 @@ Or manually add to `.mcp.json`:
 }
 ```
 
+**OpenCode** — add an `opencode.json` (project config) in your repo root:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "trello": {
+      "type": "local",
+      "command": ["uv", "--directory", "/absolute/path/to/trello-mcp", "run", "trello-mcp", "run"],
+      "enabled": true,
+      "environment": {
+        "TRELLO_API_KEY": "{env:TRELLO_API_KEY}",
+        "TRELLO_TOKEN": "{env:TRELLO_TOKEN}"
+      }
+    }
+  }
+}
+```
+
 ### SSE (network clients)
 
 Start the server first, then point your client to the SSE endpoint.
@@ -133,6 +181,12 @@ Or manually:
 ## Development
 
 ```bash
+uv sync --extra dev
+uv run pre-commit install
 uv run pytest --cov
 uv run ruff check . && uv run ruff format --check .
 ```
+
+## License
+
+[MIT](LICENSE)

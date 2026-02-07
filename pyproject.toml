@@ -3,7 +3,9 @@ name = "trello-mcp"
 version = "0.1.0"
 description = "MCP server exposing Trello operations as tools"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.12"
+authors = [{ name = "José F. González" }]
 dependencies = [
     "fastmcp>=2.0.0",
     "httpx>=0.28.0",
@@ -11,6 +13,11 @@ dependencies = [
     "pydantic-settings>=2.0.0",
     "click>=8.0.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/concongo/trello-mcp"
+Repository = "https://github.com/concongo/trello-mcp"
+Issues = "https://github.com/concongo/trello-mcp/issues"
 
 [project.optional-dependencies]
 dev = [
