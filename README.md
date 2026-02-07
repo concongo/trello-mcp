@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![CI](https://github.com/concongo/trello-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/concongo/trello-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/concongo/trello-mcp/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/concongo/trello-mcp/actions/workflows/ci.yml)
 
 An [MCP](https://modelcontextprotocol.io/) server that exposes Trello board, list, and card operations as tools — so AI assistants like Claude can manage your Trello boards directly.
 
