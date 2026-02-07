@@ -11,6 +11,11 @@ Built with [FastMCP](https://github.com/jlowin/fastmcp), [httpx](https://www.pyt
 ## Features
 
 - List, create, update, move, and archive Trello cards
+- Manage checklists and check items
+- Create, assign, and remove labels
+- Read and set custom field values
+- Create, rename, and archive lists
+- Set due dates and mark them complete
 - Browse boards and lists
 - Search boards by name
 - Add comments to cards
@@ -165,10 +170,26 @@ Or manually:
 
 ## Tools
 
+### Boards
+
 | Tool | Description |
 |------|-------------|
 | `list_boards` | List all boards for the authenticated user |
+| `search_board` | Find a board by name substring |
+
+### Lists
+
+| Tool | Description |
+|------|-------------|
 | `list_lists` | List all lists in a board |
+| `create_list` | Create a new list on a board |
+| `update_list` | Update a list's name and/or closed status |
+| `archive_list` | Archive (close) a list |
+
+### Cards
+
+| Tool | Description |
+|------|-------------|
 | `list_cards` | List all cards in a list |
 | `get_board_cards` | Get all cards on a board |
 | `create_card` | Create a new card in a list |
@@ -176,7 +197,40 @@ Or manually:
 | `update_card` | Update a card's name and/or description |
 | `add_comment` | Add a comment to a card |
 | `archive_card` | Archive (close) a card |
-| `search_board` | Find a board by name substring |
+
+### Due Dates
+
+| Tool | Description |
+|------|-------------|
+| `set_due_date` | Set a due date on a card (ISO 8601) |
+| `mark_due_complete` | Mark a card's due date as complete or incomplete |
+
+### Checklists
+
+| Tool | Description |
+|------|-------------|
+| `get_checklists` | Get all checklists on a card |
+| `create_checklist` | Create a new checklist on a card |
+| `delete_checklist` | Delete a checklist |
+| `add_check_item` | Add an item to a checklist |
+| `update_check_item` | Update a check item's state or name |
+| `delete_check_item` | Delete a check item from a checklist |
+
+### Labels
+
+| Tool | Description |
+|------|-------------|
+| `get_board_labels` | Get all labels on a board |
+| `create_label` | Create a new label on a board |
+| `add_label_to_card` | Add a label to a card |
+| `remove_label_from_card` | Remove a label from a card |
+
+### Custom Fields
+
+| Tool | Description |
+|------|-------------|
+| `get_custom_fields` | Get all custom field definitions on a board |
+| `set_card_custom_field` | Set a custom field value on a card |
 
 ## Development
 

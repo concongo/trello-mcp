@@ -1,6 +1,14 @@
 """Tests for Pydantic models."""
 
-from trello_mcp.models import TrelloBoard, TrelloCard, TrelloList
+from trello_mcp.models import (
+    TrelloBoard,
+    TrelloCard,
+    TrelloCheckItem,
+    TrelloChecklist,
+    TrelloCustomField,
+    TrelloLabel,
+    TrelloList,
+)
 
 
 class TestTrelloBoard:
@@ -41,3 +49,70 @@ class TestTrelloCard:
         data = card.model_dump()
         assert data["id"] == "c1"
         assert data["id_list"] == "l1"
+
+    def test_due_fields_defaults(self):
+        card = TrelloCard(id="c1", name="Task")
+        assert card.due is None
+        assert card.due_complete is False
+
+    def test_due_fields_from_api(self):
+        card = TrelloCard(id="c1", name="Task", due="2025-12-31T12:00:00.000Z", dueComplete=True)
+        assert card.due == "2025-12-31T12:00:00.000Z"
+        assert card.due_complete is True
+
+
+class TestTrelloCheckItem:
+    def test_from_api_response(self):
+        item = TrelloCheckItem(id="ci1", name="Step 1", state="incomplete", idChecklist="cl1")
+        assert item.id_checklist == "cl1"
+        assert item.state == "incomplete"
+
+    def test_defaults(self):
+        item = TrelloCheckItem(id="ci1", name="Step 1")
+        assert item.state == "incomplete"
+        assert item.id_checklist == ""
+
+
+class TestTrelloChecklist:
+    def test_from_api_response(self):
+        cl = TrelloChecklist(
+            id="cl1",
+            name="Tasks",
+            idCard="card1",
+            checkItems=[
+                {"id": "ci1", "name": "Step 1", "state": "incomplete", "idChecklist": "cl1"}
+            ],
+        )
+        assert cl.id_card == "card1"
+        assert len(cl.check_items) == 1
+        assert cl.check_items[0].name == "Step 1"
+
+    def test_defaults(self):
+        cl = TrelloChecklist(id="cl1", name="Tasks")
+        assert cl.id_card == ""
+        assert cl.check_items == []
+
+
+class TestTrelloLabel:
+    def test_from_api_response(self):
+        label = TrelloLabel(id="lbl1", name="Bug", color="red", idBoard="board1")
+        assert label.id_board == "board1"
+        assert label.color == "red"
+
+    def test_defaults(self):
+        label = TrelloLabel(id="lbl1")
+        assert label.name == ""
+        assert label.color is None
+        assert label.id_board == ""
+
+
+class TestTrelloCustomField:
+    def test_from_api_response(self):
+        cf = TrelloCustomField(id="cf1", name="Priority", type="list", idModel="board1")
+        assert cf.id_model == "board1"
+        assert cf.type == "list"
+
+    def test_defaults(self):
+        cf = TrelloCustomField(id="cf1", name="Priority")
+        assert cf.type == ""
+        assert cf.id_model == ""

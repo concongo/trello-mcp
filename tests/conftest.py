@@ -49,6 +49,30 @@ SAMPLE_CARDS = [
     },
 ]
 
+SAMPLE_CHECK_ITEMS = [
+    {"id": "ci1", "name": "Step 1", "state": "incomplete", "idChecklist": "cl1"},
+    {"id": "ci2", "name": "Step 2", "state": "complete", "idChecklist": "cl1"},
+]
+
+SAMPLE_CHECKLISTS = [
+    {
+        "id": "cl1",
+        "name": "Tasks",
+        "idCard": "card1",
+        "checkItems": SAMPLE_CHECK_ITEMS,
+    },
+]
+
+SAMPLE_LABELS = [
+    {"id": "lbl1", "name": "Bug", "color": "red", "idBoard": "board1"},
+    {"id": "lbl2", "name": "Feature", "color": "green", "idBoard": "board1"},
+]
+
+SAMPLE_CUSTOM_FIELDS = [
+    {"id": "cf1", "name": "Priority", "type": "list", "idModel": "board1"},
+    {"id": "cf2", "name": "Story Points", "type": "number", "idModel": "board1"},
+]
+
 
 @pytest.fixture
 def trello_client():
