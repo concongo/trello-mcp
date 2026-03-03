@@ -13,8 +13,9 @@ def cli():
 @click.option("--port", default=8000, type=int, help="Port for SSE transport")
 def run(transport: str, port: int):
     """Start the Trello MCP server."""
-    from trello_mcp.server import mcp
+    from trello_mcp.server import configure_auth, mcp
 
+    configure_auth()
     if transport == "sse":
         mcp.run(transport="sse", port=port)
     else:
