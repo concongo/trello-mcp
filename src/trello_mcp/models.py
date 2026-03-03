@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     trello_api_key: str = Field(description="Trello API key")
     trello_token: str = Field(description="Trello OAuth token")
     trello_base_url: str = Field(default="https://api.trello.com/1")
+    bearer_token: str | None = Field(default=None, description="Bearer token for HTTP auth")
 
     model_config = {"env_file": ".env"}
 

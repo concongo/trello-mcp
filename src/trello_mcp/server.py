@@ -9,6 +9,18 @@ from trello_mcp.models import Settings
 
 mcp = FastMCP("Trello MCP Server")
 
+
+def configure_auth():
+    """Enable Bearer token auth if BEARER_TOKEN is set."""
+    from fastmcp.server.auth import StaticTokenVerifier
+
+    settings = Settings()
+    if settings.bearer_token:
+        mcp.auth = StaticTokenVerifier(
+            tokens={settings.bearer_token: {"client_id": "mcp-client", "scopes": ["api"]}}
+        )
+
+
 # --- Resources: Trello API documentation ---
 
 _RESOURCES = {
